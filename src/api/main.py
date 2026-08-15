@@ -16,10 +16,16 @@ logger = logging.getLogger("scentdna_api")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Initializing ScentSearchEngine & FragranceAdvisor...")
-    app.state.search_engine = ScentSearchEngine()
-    app.state.advisor = FragranceAdvisor()
-    logger.info("ScentDNA API Layer initialized successfully!")
+    logger.info("Initializing ScentSearchEngine & FragranceAdvisor (SHARED SINGLETON)...")
+    
+    # 1. Inisialisasi HANYA 1 instance ScentSearchEngine
+    shared_search_engine = ScentSearchEngine()
+    
+    # 2. Inject instance yang sama ke app.state dan FragranceAdvisor
+    app.state.search_engine = shared_search_engine
+    app.state.advisor = FragranceAdvisor(search_engine=shared_search_engine)
+    
+    logger.info("ScentDNA API Layer initialized successfully with 1 shared engine instance!")
     yield
     logger.info("Shutting down ScentDNA API Layer...")
 
@@ -30,7 +36,7 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Konfigurasi CORS Eksplisit (Production & Localhost Support)
+# Konfigurasi CORS Eksplisit
 raw_origins = os.getenv(
     "ALLOWED_ORIGINS",
     "https://scentdna-5646.vercel.app,http://localhost:5500,http://127.0.0.1:5500"
