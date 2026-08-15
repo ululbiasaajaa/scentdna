@@ -1,2 +1,11 @@
+[project]
+name = "scentdna"
+version = "0.1.0"
+description = "ScentDNA Perfume Engine"
+dependencies = [
+    "fastapi",
+    "uvicorn"
+]
+
 [tool.vercel]
 entrypoint = "src.api.main:app"
