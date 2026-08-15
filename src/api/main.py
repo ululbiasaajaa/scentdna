@@ -3,10 +3,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from src.search import ScentSearchEngine
-from src.services.advisor import FragranceAdvisor  
+from src.services.advisor import FragranceAdvisor
 from src.api.schemas import (
     SearchRequest, SearchResponse, ProductResult,
-    RecommendRequest, RecommendResponse            
+    RecommendRequest, RecommendResponse
 )
 
 # Setup Logger
@@ -17,7 +17,7 @@ logger = logging.getLogger("scentdna_api")
 async def lifespan(app: FastAPI):
     logger.info("Initializing ScentSearchEngine & FragranceAdvisor...")
     app.state.search_engine = ScentSearchEngine()
-    app.state.advisor = FragranceAdvisor() 
+    app.state.advisor = FragranceAdvisor()
     logger.info("ScentDNA API Layer initialized successfully!")
     yield
     logger.info("Shutting down ScentDNA API Layer...")
@@ -31,10 +31,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  
-    allow_headers=["*"],  
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/", tags=["Health Check"])
@@ -46,9 +46,8 @@ def search_perfumes(payload: SearchRequest):
     try:
         engine: ScentSearchEngine = app.state.search_engine
         
-        # TERUSKAN PARAMETER FILTER KE SEARCH ENGINE
         raw_results = engine.search_similar_perfumes(
-            query_text=payload.query, 
+            query_text=payload.query,
             top_k=payload.limit,
             min_price=payload.min_price,
             max_price=payload.max_price,
@@ -75,15 +74,11 @@ def search_perfumes(payload: SearchRequest):
 
 @app.post("/recommend", response_model=RecommendResponse, tags=["AI Fragrance Advisor"])
 def recommend_perfumes(payload: RecommendRequest):
-    """
-    Endpoint RAG: Menggabungkan Vector Retrieval dengan Gemini AI + Advanced Filtering.
-    """
     try:
         advisor: FragranceAdvisor = app.state.advisor
         
-        # TERUSKAN PARAMETER FILTER KE ADVISOR RAG
         rag_output = advisor.recommend_perfume(
-            query=payload.query, 
+            query=payload.query,
             top_k=payload.limit,
             min_price=payload.min_price,
             max_price=payload.max_price,
