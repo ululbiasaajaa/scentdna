@@ -1,4 +1,5 @@
 import logging
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,9 +30,16 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Konfigurasi CORS Eksplisit (Production & Localhost Support)
+raw_origins = os.getenv(
+    "ALLOWED_ORIGINS",
+    "https://scentdna-5646.vercel.app,http://localhost:5500,http://127.0.0.1:5500"
+)
+allowed_origins = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
