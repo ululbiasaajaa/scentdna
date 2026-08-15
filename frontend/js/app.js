@@ -1,7 +1,8 @@
 // State Management
 let currentMode = 'search'; // 'search' atau 'recommend'
 
-const API_BASE = "http://127.0.0.1:8000";
+// Terhubung otomatis ke Railway Production
+const API_BASE = "https://scentdna-production.up.railway.app";
 
 function switchTab(mode) {
     currentMode = mode;
@@ -79,7 +80,7 @@ async function handleSubmit(event) {
 
     } catch (err) {
         loadingIndicator.classList.add('hidden');
-        errorBanner.textContent = `Error: ${err.message}. Pastikan server FastAPI di terminal sudah menyala!`;
+        errorBanner.textContent = `Error: ${err.message}. Pastikan server FastAPI di Railway sudah aktif!`;
         errorBanner.classList.remove('hidden');
     }
 }
