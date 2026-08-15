@@ -4,13 +4,16 @@ import hashlib
 import torch
 from typing import List, Optional
 
-# Batasi PyTorch thread pool di level environment & runtime
+# Set PyTorch thread limit HANYA SEKALI di paling atas file (Module Level)
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 torch.set_num_threads(1)
-torch.set_num_interop_threads(1)
+try:
+    torch.set_num_interop_threads(1)
+except RuntimeError:
+    pass
 
 from sentence_transformers import SentenceTransformer
 
@@ -21,8 +24,7 @@ class TextEmbedder:
 
     def _load_model(self) -> SentenceTransformer:
         if self._model is None:
-            torch.set_num_threads(1)
-            torch.set_num_interop_threads(1)
+            # Dihapus set_num_interop_threads dari sini agar tidak memicu RuntimeError
             self._model = SentenceTransformer(self._model_name)
             self._model.eval()
         return self._model
@@ -40,9 +42,8 @@ class TextEmbedder:
             return []
         
         model = self._load_model()
-        torch.set_num_threads(1)
         
-        # P2: Bungkus dengan no_grad & paksa batch_size minimal untuk hemat RAM
+        # Jalankan inference secara aman dengan no_grad
         with torch.no_grad():
             embeddings = model.encode(
                 texts, 
