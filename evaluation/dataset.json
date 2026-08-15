@@ -1,0 +1,52 @@
+[
+  {
+    "query": "parfum manis vanilla",
+    "relevant_products": [
+      "Mykonos - Vanilla Clouds Extrait de Parfum 50ml",
+      "Mykonos - Bonfire Vanilla Extrait de Parfum 50ml"
+    ],
+    "filters": {
+      "min_price": null,
+      "max_price": null,
+      "brand": null
+    }
+  },
+  {
+    "query": "parfum Mykonos di bawah 500 ribu",
+    "relevant_products": [
+      "Mykonos - Vanilla Clouds Extrait de Parfum 50ml",
+      "Mykonos - Verve Extrait de Parfum 50ml",
+      "Mykonos - Penthouse Extrait de Parfum 50ml & 100ml",
+      "Mykonos - Xoxo Rosy EDP 50ml"
+    ],
+    "filters": {
+      "min_price": 0,
+      "max_price": 500000,
+      "brand": "Mykonos"
+    }
+  },
+  {
+    "query": "parfum fresh buat kantor",
+    "relevant_products": [
+      "Mykonos - Marbella Extrait de Parfum 100ml",
+      "Mykonos - Verve Extrait de Parfum 50ml"
+    ],
+    "filters": {
+      "min_price": null,
+      "max_price": null,
+      "brand": null
+    }
+  },
+  {
+    "query": "parfum brand Mykonos dengan aroma mewah",
+    "relevant_products": [
+      "Mykonos - Marbella Extrait de Parfum 100ml",
+      "Mykonos - Vanilla Clouds Extrait de Parfum 50ml"
+    ],
+    "filters": {
+      "min_price": null,
+      "max_price": null,
+      "brand": "Mykonos"
+    }
+  }
+]
